@@ -82,7 +82,7 @@ Before running the project, make sure you have the following prerequisites insta
    npm start
    ```
 
-7. Access the search interface by opening `index.html` in your web browser or use the REST API endpoint.
+7. Crawling is starting, check the logs to see which page is being processed, access the search interface by opening `index.html` in your web browser or use the REST API endpoint.
 
 ## Usage
 
@@ -122,3 +122,13 @@ The application can be configured using the `config/constants.js` file. The foll
 - `REGEX_URL`: Regular expression for filtering URLs to crawl.
 - `START_URL`: Starting URL for the crawler.
 - `CRAWLING_ENABLED`: Flag to enable or disable crawling.
+
+## Resetting the Environment
+
+If you need to reset the entire environment, including stopping the Docker containers and removing the associated volumes, you can use the following command:
+
+```bash
+docker-compose down && docker volume prune
+```
+
+This command will stop and remove the Docker containers defined in the `docker-compose.yml` file and prune the unused volumes. Be cautious when using this command, as it will permanently delete the data stored in the volumes.
