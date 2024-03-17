@@ -5,7 +5,8 @@ This project is a web crawler and search engine that crawls websites, indexes th
 ## Features
 
 - Crawls websites starting from a specified URL
-- Stores crawled pages in MongoDB
+- Fill a queue of link url using RabbitMQ
+- Stores crawled pages details in MongoDB
 - Indexes page content using Elasticsearch
 - Provides a REST API endpoint for searching keywords
 - Implements a simple web interface for performing searches
