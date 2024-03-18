@@ -1,5 +1,33 @@
 version: '3'
 services:
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - RABBITMQ_URL=amqp://rabbitmq
+      - MONGODB_URL=mongodb://mongo:27017
+      - START_URL=https://cryptoast.fr/      # The initial URL from which the crawler will start discovering and crawling successive URLs
+      - CRAWLING_ENABLED=true                # Set to 'false' to run the REST API without launching the crawler
+      - PREFETCH_COUNT=1                     # The number of messages each consumer will process concurrently from the queue
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -40,34 +68,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  backend:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - RABBITMQ_URL=amqp://rabbitmq
-      - MONGODB_URL=mongodb://mongo:27017
-      - START_URL=https://cryptoast.fr/      # The initial URL from which the crawler will start discovering and crawling successive URLs
-      - CRAWLING_ENABLED=true                # Set to 'false' to run the REST API without launching the crawler
-      - PREFETCH_COUNT=1                     # The number of messages each consumer will process concurrently from the queue
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "100m"
-        max-file: "5"
   frontend:
     image: nginx:alpine
     volumes:
