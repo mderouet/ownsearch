@@ -49,8 +49,6 @@ Before running the project, make sure you have the following prerequisites insta
     └── logger.js
 ```
 
-Sure! Here's the updated "Getting Started with Docker" section with fewer steps:
-
 ## Getting Started with Docker
 
 To get started with the project using Docker, follow these steps:
