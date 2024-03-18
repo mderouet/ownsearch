@@ -1,5 +1,3 @@
-Here's the updated README based on the code differences and the project structure:
-
 # Web Crawler and Search Engine
 
 This project is a web crawler and search engine that crawls websites, indexes the content, and provides a search interface to retrieve relevant results.
