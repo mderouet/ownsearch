@@ -52,6 +52,24 @@ async function main() {
         res.status(500).json({ error: 'An error occurred while searching' });
       }
     });
+    
+    app.get('/latest', async (req, res) => {
+      try {
+        const latestPage = await db.collection('pages').findOne(
+          { processed: true },
+          { sort: { _id: -1 } }
+        );
+    
+        if (latestPage) {
+          res.json(latestPage);
+        } else {
+          res.status(404).json({ error: 'No processed pages found' });
+        }
+      } catch (error) {
+        logger.error('Error retrieving the latest processed page from MongoDB:', error);
+        res.status(500).json({ error: 'An error occurred while retrieving the latest processed page' });
+      }
+    });
 
     app.get('/health', (req, res) => {
       res.status(200).json({ status: 'OK' });

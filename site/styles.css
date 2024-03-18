@@ -1,19 +1,18 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
+    padding: 20px;
+    background-color: #f5f8fa;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #1da1f2;
 }
 
 .search-bar {
@@ -22,51 +21,130 @@ h1 {
     margin-bottom: 20px;
 }
 
-input[type="text"] {
-    width: 300px;
+.search-bar input {
     padding: 10px;
+    width: 300px;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #1da1f2;
+    border-radius: 25px;
+    outline: none;
 }
 
-button {
+.search-bar button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #4285f4;
-    color: #fff;
+    background-color: #1da1f2;
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 25px;
     cursor: pointer;
     margin-left: 10px;
 }
 
-.result {
-    background-color: #fff;
+#results {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+#results .tile {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
 }
 
-.result a {
-    font-size: 18px;
-    color: #1a0dab;
-    text-decoration: none;
+#results .tile:hover {
+    transform: translateY(-5px);
 }
 
-.result a:hover {
+#results .tile h3 {
+    margin: 0;
+    color: #1da1f2;
+}
+
+#results .tile p {
+    margin: 5px 0;
+    color: #657786;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #1da1f2;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 9999;
+}
+
+.notification.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.notification #notificationContent {
+    margin-bottom: 10px;
+}
+
+.notification a {
+    color: white;
     text-decoration: underline;
 }
 
-.result .url {
-    color: #006621;
-    font-size: 14px;
-    margin-top: 5px;
+#results {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
 }
 
-.result .description {
-    color: #545454;
+#results .tile {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+#results .tile:hover {
+    transform: translateY(-5px);
+}
+
+#results .tile h3 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+#results .tile h3 a {
+    color: #1da1f2;
+    text-decoration: none;
+}
+
+#results .tile .url {
+    color: #657786;
     font-size: 14px;
-    margin-top: 10px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+#results .tile .path {
+    color: #657786;
+    font-size: 14px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+#results .tile .description {
+    color: #14171a;
+    font-size: 16px;
+    line-height: 1.4;
 }
