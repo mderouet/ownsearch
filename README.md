@@ -1,6 +1,6 @@
 # Web Crawler and Search Engine
 
-This project is a web crawler and search engine that crawls websites, indexes the content, and provides a search interface to retrieve relevant results.
+This project is a web crawler and search engine that crawls websites from a starting URL, indexes the content, and provides a search interface to retrieve relevant results.
 
 <img width="1294" alt="image" src="https://github.com/mderouet/ownsearch/assets/9265133/57ae34eb-8a81-40a8-a06f-2b4981ce519a">
 
