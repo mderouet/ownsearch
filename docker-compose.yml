@@ -10,12 +10,22 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   mongo:
     image: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     environment:
@@ -23,12 +33,49 @@ services:
     ports:
       - "0.0.0.0:9200:9200"
       - "0.0.0.0:9300:9300"
-  web:
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - RABBITMQ_URL=amqp://rabbitmq
+      - MONGODB_URL=mongodb://mongo:27017
+      - START_URL=https://cryptoast.fr/
+      - CRAWLING_ENABLED=true
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  frontend:
     image: nginx:alpine
     volumes:
       - ./site:/usr/share/nginx/html
+      - ./nginx:/etc/nginx/conf.d
     ports:
       - "80:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   rabbitmq_data:
   mongo_data:

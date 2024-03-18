@@ -10,7 +10,6 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-
 async function main() {
   try {
     logger.info('Connecting to MongoDB');
@@ -20,17 +19,16 @@ async function main() {
     logger.info('Connecting to Elasticsearch');
     const esClient = await connectToElasticsearch();
 
-    if(CRAWLING_ENABLED){
+    if (CRAWLING_ENABLED) {
       logger.info('Starting the crawler');
       startCrawler(db, esClient, channel);
     } else {
       logger.info('Crawler is not activated');
     }
 
-    // REST API endpoint for searching keywords in Elasticsearch
     app.get('/search', async (req, res) => {
       const { keyword, size = 30 } = req.query;
-    
+
       try {
         const searchResult = await esClient.search({
           index: ELASTICSEARCH_INDEX,
@@ -44,10 +42,10 @@ async function main() {
           },
           size: parseInt(size),
         });
-    
+
         const hits = searchResult.body.hits.hits;
         const results = hits.map((hit) => hit._source);
-    
+
         res.json(results);
       } catch (error) {
         logger.error('Error searching in Elasticsearch:', error);
@@ -55,7 +53,10 @@ async function main() {
       }
     });
 
-    // Start the Express server
+    app.get('/health', (req, res) => {
+      res.status(200).json({ status: 'OK' });
+    });
+
     const port = process.env.PORT || 3000;
     app.listen(port, () => {
       logger.info(`REST Server is running on port ${port}`);

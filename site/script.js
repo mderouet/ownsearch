@@ -9,8 +9,8 @@ function searchItems() {
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = '';
 
-    fetch(`http://localhost:3000/search?keyword=${encodeURIComponent(keyword)}`)
-        .then(response => response.json())
+    fetch(`/search?keyword=${encodeURIComponent(keyword)}`)
+    .then(response => response.json())
         .then(data => {
             data.forEach(item => {
                 const result = document.createElement('div');

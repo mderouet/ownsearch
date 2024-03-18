@@ -1,3 +1,5 @@
+Here's the updated README based on the code differences and the project structure:
+
 # Web Crawler and Search Engine
 
 This project is a web crawler and search engine that crawls websites, indexes the content, and provides a search interface to retrieve relevant results.
@@ -5,8 +7,8 @@ This project is a web crawler and search engine that crawls websites, indexes th
 ## Features
 
 - Crawls websites starting from a specified URL
-- Fill a queue of link url using RabbitMQ
-- Stores crawled pages details in MongoDB
+- Fills a queue of link URLs using RabbitMQ
+- Stores crawled page details in MongoDB
 - Indexes page content using Elasticsearch
 - Provides a REST API endpoint for searching keywords
 - Implements a simple web interface for performing searches
@@ -15,13 +17,14 @@ This project is a web crawler and search engine that crawls websites, indexes th
 
 Before running the project, make sure you have the following prerequisites installed:
 
-- Node.js (version 21.7.1)
 - Docker
+- Node (if you are not running the project using docker)
 
 ## Project Structure
 
 ```
 .
+├── Dockerfile
 ├── README.md
 ├── config
 │   ├── constants.js
@@ -30,9 +33,8 @@ Before running the project, make sure you have the following prerequisites insta
 │   └── rabbitmq.js
 ├── docker-compose.yml
 ├── logs
-│   ├── combined.log
-│   ├── error.log
-│   └── verbose.log
+├── nginx
+│   └── default.conf
 ├── package-lock.json
 ├── package.json
 ├── server.js
@@ -47,7 +49,11 @@ Before running the project, make sure you have the following prerequisites insta
     └── logger.js
 ```
 
-## Getting Started
+Sure! Here's the updated "Getting Started with Docker" section with fewer steps:
+
+## Getting Started with Docker
+
+To get started with the project using Docker, follow these steps:
 
 1. Clone the repository:
 
@@ -61,29 +67,42 @@ Before running the project, make sure you have the following prerequisites insta
    cd ownsearch
    ```
 
-3. Install the dependencies:
+3. Open the `docker-compose.yml` file in a text editor and locate the `backend` service section.
 
-   ```bash
-   npm install
+4. Search for `START_URL` in the `docker-compose.yml` file environment variable section of the `backend` service to set the desired starting URL for the crawler:
+
+   ```yaml
+   environment:
+     - START_URL=https://example.com
    ```
 
-4. Start the required services using Docker Compose:
+5. Start the application using Docker Compose:
 
    ```bash
-   docker-compose up -d
+   docker-compose up -d --build
    ```
 
-5. Configure the application by modifying the `config/constants.js` file:
-   - Default configuration should do the trick for RabbitMQ, Elasticsearch, and MongoDB.
-   - Adjust the start URL to your preference
+   This command will build the Docker images and start the containers in detached mode.
 
-6. Start the application:
+6. The application will start crawling from the specified `START_URL`. You can check the logs to see which pages are being processed. Access the search interface by opening `http://localhost` in your web browser or use the REST API endpoint.
 
-   ```bash
-   npm start
-   ```
+## Configuration
 
-7. Crawling is starting, check the logs to see which page is being processed, access the search interface by opening `index.html` in your web browser or use the REST API endpoint.
+The application can be configured using environment variables. The `config/constants.js` file reads the environment variables from the `docker-compose.yml` file. If the environment variables are not set, it falls back to default values for local development.
+
+The available configuration options are:
+
+- `ELASTICSEARCH_URL`: URL for connecting to Elasticsearch.
+- `ELASTICSEARCH_INDEX`: Name of the Elasticsearch index for storing crawled pages.
+- `RABBITMQ_URL`: URL for connecting to RabbitMQ.
+- `QUEUE_NAME`: Name of the RabbitMQ queue for crawling URLs.
+- `DLX_NAME`: Name of the RabbitMQ dead letter exchange.
+- `DLQ_NAME`: Name of the RabbitMQ dead letter queue.
+- `MONGODB_URL`: URL for connecting to MongoDB.
+- `MONGODB_DATABASE`: Name of the MongoDB database.
+- `MONGODB_COLLECTION`: Name of the MongoDB collection for storing crawled pages.
+- `START_URL`: Starting URL for the crawler.
+- `CRAWLING_ENABLED`: Flag to enable or disable crawling.
 
 ## Usage
 
@@ -91,7 +110,7 @@ Before running the project, make sure you have the following prerequisites insta
 
 The project provides a simple web interface for performing searches. To use the web interface:
 
-1. Open the `index.html` file in your web browser.
+1. Open `http://localhost` in your web browser.
 2. Enter a keyword in the search input field.
 3. Click the "Search" button or press Enter.
 4. The search results will be displayed on the page.
@@ -106,30 +125,12 @@ Example cURL request:
 curl -X GET "http://localhost:3000/search?keyword=example"
 ```
 
-## Configuration
-
-The application can be configured using the `config/constants.js` file. The following options are available:
-
-- `RABBITMQ_URL`: URL for connecting to RabbitMQ.
-- `QUEUE_NAME`: Name of the RabbitMQ queue for crawling URLs.
-- `DLX_NAME`: Name of the RabbitMQ dead letter exchange.
-- `DLQ_NAME`: Name of the RabbitMQ dead letter queue.
-- `MAX_RETRIES`: Maximum number of retries for failed crawling attempts.
-- `ELASTICSEARCH_INDEX`: Name of the Elasticsearch index for storing crawled pages.
-- `ELASTICSEARCH_URL`: URL for connecting to Elasticsearch.
-- `MONGODB_URL`: URL for connecting to MongoDB.
-- `MONGODB_DATABASE`: Name of the MongoDB database.
-- `MONGODB_COLLECTION`: Name of the MongoDB collection for storing crawled pages.
-- `REGEX_URL`: Regular expression for filtering URLs to crawl.
-- `START_URL`: Starting URL for the crawler.
-- `CRAWLING_ENABLED`: Flag to enable or disable crawling.
-
 ## Resetting the Environment
 
 If you need to reset the entire environment, including stopping the Docker containers and removing the associated volumes, you can use the following command:
 
 ```bash
-docker-compose down && docker volume prune
+docker-compose down && docker volume prune --all
 ```
 
 This command will stop and remove the Docker containers defined in the `docker-compose.yml` file and prune the unused volumes. Be cautious when using this command, as it will permanently delete the data stored in the volumes.
