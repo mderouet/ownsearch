@@ -23,6 +23,12 @@ services:
     ports:
       - "0.0.0.0:9200:9200"
       - "0.0.0.0:9300:9300"
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./site:/usr/share/nginx/html
+    ports:
+      - "80:80"
 volumes:
   rabbitmq_data:
   mongo_data:
