@@ -8,7 +8,7 @@ module.exports = {
   MONGODB_URL: process.env.MONGODB_URL || 'mongodb://localhost:27017',
   MONGODB_DATABASE: process.env.MONGODB_DATABASE || 'crawler',
   MONGODB_COLLECTION: process.env.MONGODB_COLLECTION || 'pages',
-  START_URL: process.env.START_URL || "https://cryptoast.fr//",
+  START_URL: process.env.START_URL || "https://cryptoast.fr/",
   REGEX_URL: /(?:)/,
   CRAWLING_ENABLED: process.env.CRAWLING_ENABLED === 'true' || true,
   PREFETCH_COUNT: parseInt(process.env.PREFETCH_COUNT) || 1
