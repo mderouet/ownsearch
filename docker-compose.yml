@@ -48,8 +48,9 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - RABBITMQ_URL=amqp://rabbitmq
       - MONGODB_URL=mongodb://mongo:27017
-      - START_URL=https://cryptoast.fr/
-      - CRAWLING_ENABLED=true
+      - START_URL=https://cryptoast.fr/      # The initial URL from which the crawler will start discovering and crawling successive URLs
+      - CRAWLING_ENABLED=true                # Set to 'false' to run the REST API without launching the crawler
+      - PREFETCH_COUNT=1                     # The number of messages each consumer will process concurrently from the queue
     depends_on:
       rabbitmq:
         condition: service_healthy

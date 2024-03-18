@@ -111,7 +111,13 @@ async function crawlPage(url, db, esClient, channel) {
     }
 
   } catch (error) {
-    logger.error("Error while crawling page: ", error);
+    if (error.response) {
+      logger.error(`Server responded with status code ${error.response.status} for URL: ${url}`);
+    } else if (error.request) {
+      logger.error(`No response received for URL: ${url}`);
+    } else {
+      logger.error(`Error occurred while setting up the request for URL: ${url}`, error.message);
+    }
   }
 }
 

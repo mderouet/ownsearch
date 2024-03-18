@@ -1,5 +1,5 @@
 const amqp = require('amqplib');
-const { RABBITMQ_URL, QUEUE_NAME, DLX_NAME, DLQ_NAME } = require('./constants');
+const { RABBITMQ_URL, QUEUE_NAME, DLX_NAME, DLQ_NAME, PREFETCH_COUNT } = require('./constants');
 
 async function connectToRabbitMQ() {
   const connection = await amqp.connect(RABBITMQ_URL);
@@ -21,8 +21,8 @@ async function connectToRabbitMQ() {
     deadLetterRoutingKey: DLQ_NAME
   });
 
-  // Set the prefetch count to 1 to process messages one at a time
-  channel.prefetch(1);
+  // Set the prefetch count based on the configuration
+  channel.prefetch(PREFETCH_COUNT);
 
   return channel;
 }

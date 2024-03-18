@@ -10,5 +10,6 @@ module.exports = {
   MONGODB_COLLECTION: process.env.MONGODB_COLLECTION || 'pages',
   START_URL: process.env.START_URL || "https://cryptoast.fr//",
   REGEX_URL: /(?:)/,
-  CRAWLING_ENABLED: process.env.CRAWLING_ENABLED === 'true' || true
+  CRAWLING_ENABLED: process.env.CRAWLING_ENABLED === 'true' || true,
+  PREFETCH_COUNT: parseInt(process.env.PREFETCH_COUNT) || 1
 };
